@@ -1,4 +1,4 @@
-# @zovo/webext-permissions
+# @theluckystrike/webext-permissions
 
 Runtime permission checking and requesting for Chrome extensions. Wraps the `chrome.permissions` API with type-safe helpers, human-readable descriptions, and user-friendly error handling.
 
@@ -7,7 +7,7 @@ Part of the [@zovo/webext](https://zovo.one) toolkit.
 ## Install
 
 ```bash
-npm install @zovo/webext-permissions
+npm install @theluckystrike/webext-permissions
 ```
 
 ## Quick Start
@@ -17,7 +17,7 @@ import {
   checkPermission,
   requestPermission,
   getGrantedPermissions,
-} from "@zovo/webext-permissions";
+} from "@theluckystrike/webext-permissions";
 
 // Check if a permission is granted
 const { granted } = await checkPermission("tabs");

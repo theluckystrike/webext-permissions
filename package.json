@@ -1,5 +1,8 @@
 {
-  "name": "@zovo/webext-permissions",
+  "name": "@theluckystrike/webext-permissions",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "version": "1.0.0",
   "description": "Runtime permission checking and requesting for Chrome extensions. Part of @zovo/webext.",
   "type": "module",
