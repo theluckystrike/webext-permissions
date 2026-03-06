@@ -1,54 +1,42 @@
-# Contributing to webext-permissions
+# Contributing to @theluckystrike/webext-permissions
 
-Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to this project.
+Thanks for your interest in contributing.
 
-## How to File Issues
 
-- Search existing issues before opening a new one to avoid duplicates.
-- Use the provided issue templates (Bug Report or Feature Request) when applicable.
-- Include as much relevant information as possible to help us understand and reproduce the issue.
+REPORTING ISSUES
 
-## Development Workflow
+Open an issue on GitHub. Include the browser, manifest version, package version, and steps to reproduce the problem. A minimal reproduction repo or code snippet helps a lot.
 
-1. **Fork** the repository on GitHub.
-2. **Clone** your fork locally:
-   ```bash
-   git clone https://github.com/<your-username>/webext-permissions.git
-   cd webext-permissions
-   ```
-3. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-4. **Create a branch** for your change:
-   ```bash
-   git checkout -b my-feature
-   ```
-5. **Make your changes** and ensure all tests pass:
-   ```bash
-   npm test
-   ```
-6. **Commit** your changes with a clear, descriptive commit message.
-7. **Push** your branch to your fork:
-   ```bash
-   git push origin my-feature
-   ```
-8. **Open a Pull Request** against the `main` branch of this repository.
 
-## Code Style
+DEVELOPMENT WORKFLOW
 
-- Write clean, readable TypeScript.
-- Follow the existing code conventions found in the project.
-- Keep changes focused — one logical change per pull request.
+Fork the repo and clone your fork locally.
 
-## Running Tests
+  git clone https://github.com/YOUR_USERNAME/webext-permissions.git
+  cd webext-permissions
+  npm install
 
-```bash
-npm test
-```
+Create a branch for your change.
 
-All pull requests must pass the existing test suite before they can be merged. If you add new functionality, please include corresponding tests.
+  git checkout -b my-change
 
-## Code of Conduct
+Make your changes, then run the tests.
 
-Be respectful and constructive in all interactions. We are committed to providing a welcoming and inclusive experience for everyone.
+  npm test
+
+Push your branch and open a pull request against main.
+
+
+CODE STYLE
+
+Write TypeScript with strict mode enabled. Keep functions small and focused. Add JSDoc comments for public API surface. Follow the patterns already in the codebase.
+
+
+TESTING
+
+Every new feature or bug fix should include a test. The test suite uses Vitest. Run npm test before submitting your PR.
+
+
+LICENSE
+
+By contributing, you agree that your contributions will be licensed under the MIT License.

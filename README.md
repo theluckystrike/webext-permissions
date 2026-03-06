@@ -1,119 +1,124 @@
 # @theluckystrike/webext-permissions
 
-Runtime permission checking and requesting for Chrome extensions. Wraps the `chrome.permissions` API with type-safe helpers, human-readable descriptions, and user-friendly error handling.
+Runtime permission management for Chrome extensions. Check, request, and remove optional permissions with a clean async API. Includes human-readable descriptions for all 54 Chrome permission strings.
 
-Part of the [@zovo/webext](https://zovo.one) toolkit.
 
-## Install
+INSTALL
 
-```bash
 npm install @theluckystrike/webext-permissions
-```
 
-## Quick Start
 
-```ts
+QUICK START
+
 import {
   checkPermission,
   requestPermission,
   getGrantedPermissions,
+  describePermission,
 } from "@theluckystrike/webext-permissions";
 
 // Check if a permission is granted
-const { granted } = await checkPermission("tabs");
+const result = await checkPermission("storage");
+console.log(result.granted, result.description);
 
 // Request a permission (must be called from a user gesture)
-document.getElementById("btn")!.addEventListener("click", async () => {
-  const result = await requestPermission("notifications");
-  if (result.granted) {
-    console.log("Permission granted!");
-  } else {
-    console.log("Denied:", result.error);
-  }
-});
+const req = await requestPermission("tabs");
+if (req.granted) {
+  console.log("tabs permission granted");
+}
 
-// List all currently granted permissions
+// Get all currently granted permissions
 const granted = await getGrantedPermissions();
-granted.forEach((p) => console.log(p.permission, "-", p.description));
-```
 
-## API Reference
+// Get a human-readable description
+describePermission("activeTab");
+// "Access the currently active tab when you click the extension"
 
-### Types
 
-```ts
-interface PermissionResult {
-  permission: string;
-  granted: boolean;
-  description: string; // Human-readable description
+API
+
+checkPermission(permission)
+
+Checks whether a single permission is currently granted. Returns a Promise resolving to a PermissionResult with permission name, granted status, and a human-readable description.
+
+
+checkPermissions(permissions)
+
+Batch version. Takes an array of permission strings and returns a Promise resolving to an array of PermissionResult objects in the same order.
+
+
+requestPermission(permission)
+
+Requests a single optional permission. This must be called from a user gesture like a button click. Returns a Promise resolving to a RequestResult with a granted boolean and an optional error string.
+
+
+requestPermissions(permissions)
+
+Requests multiple permissions in a single browser prompt. Same user gesture requirement applies.
+
+
+removePermission(permission)
+
+Removes a previously granted permission. Returns a Promise resolving to true if the removal succeeded.
+
+
+getGrantedPermissions()
+
+Returns all currently granted permissions as an array of PermissionResult objects, each with a human-readable description.
+
+
+describePermission(permission)
+
+Synchronous function that returns a human-readable description for any Chrome permission string. For unknown permissions, returns a fallback string.
+
+
+listPermissions()
+
+Returns all 54 known Chrome permissions with their descriptions. The granted field is always false in this listing. Use checkPermissions for live status.
+
+
+TYPES
+
+  PermissionResult    { permission: string; granted: boolean; description: string }
+  RequestResult       { granted: boolean; error?: string }
+
+
+PERMISSION DESCRIPTIONS
+
+The library ships with plain-English descriptions for all standard Chrome permissions. A few examples:
+
+  activeTab           Access the currently active tab when you click the extension
+  storage             Store and retrieve data locally
+  tabs                Read information about open tabs
+  notifications       Show desktop notifications
+  cookies             Read and modify cookies
+  scripting           Inject scripts into web pages
+  webNavigation       Track navigation events
+  bookmarks           Read and modify bookmarks
+  history             Read and modify browsing history
+  downloads           Manage downloads
+
+There are 54 descriptions in total. See the source for the full list.
+
+
+MANIFEST SETUP
+
+Permissions you want to request at runtime must be listed under optional_permissions in your manifest.json.
+
+{
+  "optional_permissions": ["tabs", "bookmarks", "history"]
 }
 
-interface RequestResult {
-  granted: boolean;
-  error?: string; // Present when the request fails
-}
-```
+Required permissions listed under permissions are always granted and cannot be managed at runtime.
 
-### `describePermission(permission: string): string`
 
-Returns a human-readable description for a Chrome permission string. Falls back to a generic description for unknown permissions.
-
-```ts
-describePermission("tabs"); // "Read information about open tabs"
-describePermission("unknown"); // 'Use the "unknown" API'
-```
-
-### `listPermissions(): PermissionResult[]`
-
-Returns all known Chrome permissions with their descriptions. The `granted` field is always `false` -- use `checkPermissions()` for live status.
-
-### `checkPermission(permission: string): Promise<PermissionResult>`
-
-Checks whether a single permission is currently granted.
-
-```ts
-const result = await checkPermission("storage");
-// { permission: "storage", granted: true, description: "Store and retrieve data locally" }
-```
-
-### `checkPermissions(permissions: string[]): Promise<PermissionResult[]>`
-
-Batch-checks multiple permissions at once. Returns results in the same order as the input array.
-
-```ts
-const results = await checkPermissions(["tabs", "history", "storage"]);
-results.forEach((r) => console.log(r.permission, r.granted));
-```
-
-### `requestPermission(permission: string): Promise<RequestResult>`
-
-Requests a single optional permission. Must be called from a user gesture (e.g., click handler). Returns `{ granted: true }` on success, or `{ granted: false, error: "..." }` on failure.
-
-### `requestPermissions(permissions: string[]): Promise<RequestResult>`
-
-Requests multiple permissions in a single browser prompt.
-
-### `removePermission(permission: string): Promise<boolean>`
-
-Removes a previously granted permission. Returns `true` if removal succeeded.
-
-### `getGrantedPermissions(): Promise<PermissionResult[]>`
-
-Returns all currently granted permissions with human-readable descriptions.
-
-### `PERMISSION_DESCRIPTIONS: Record<string, string>`
-
-The raw mapping of permission names to human-readable descriptions. Useful for building custom UIs.
-
-## Requirements
-
-- Chrome extension environment with `chrome.permissions` API access
-- Permissions must be declared as `optional_permissions` in `manifest.json` to be requestable at runtime
-
-## License
+LICENSE
 
 MIT
 
----
 
-Built with [Zovo](https://zovo.one)
+ABOUT
+
+Part of the @zovo/webext toolkit. Built by theluckystrike at zovo.one, a studio for Chrome extensions and browser tools.
+
+https://github.com/theluckystrike/webext-permissions
