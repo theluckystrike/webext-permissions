@@ -1,3 +1,8 @@
+[![CI](https://github.com/theluckystrike/webext-permissions/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-permissions/actions)
+[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-permissions)](https://www.npmjs.com/package/@theluckystrike/webext-permissions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+
 # @theluckystrike/webext-permissions
 
 Runtime permission management for Chrome extensions. Check, request, and remove optional permissions with a clean async API. Includes human-readable descriptions for all 54 Chrome permission strings.
@@ -125,3 +130,7 @@ https://github.com/theluckystrike/webext-permissions
 
 
 Part of the **[Chrome Extension Toolkit](https://github.com/theluckystrike/chrome-extension-toolkit)** by theluckystrike. See all templates, packages, and guides at [github.com/theluckystrike/chrome-extension-toolkit](https://github.com/theluckystrike/chrome-extension-toolkit).
+
+## License
+
+MIT
