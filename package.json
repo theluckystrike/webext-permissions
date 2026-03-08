@@ -31,11 +31,15 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "chrome",
-    "extension",
+    "chrome-extension",
     "permissions",
+    "runtime-permissions",
+    "typescript",
     "webextension",
-    "browser"
+    "browser-extension",
+    "manifest-v3",
+    "optional-permissions",
+    "chrome-permissions"
   ],
   "author": "theluckystrike",
   "license": "MIT",

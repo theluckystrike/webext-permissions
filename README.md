@@ -1,120 +1,104 @@
-[![CI](https://github.com/theluckystrike/webext-permissions/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-permissions/actions)
-[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-permissions)](https://www.npmjs.com/package/@theluckystrike/webext-permissions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+<div align="center">
 
 # @theluckystrike/webext-permissions
 
-Runtime permission management for Chrome extensions. Check, request, and remove optional permissions with a clean async API. Includes human-readable descriptions for all 54 Chrome permission strings.
+Runtime permission checking and requesting for Chrome extensions. Typed helpers for the `chrome.permissions` API.
 
-INSTALL
+[![npm version](https://img.shields.io/npm/v/@theluckystrike/webext-permissions)](https://www.npmjs.com/package/@theluckystrike/webext-permissions)
+[![npm downloads](https://img.shields.io/npm/dm/@theluckystrike/webext-permissions)](https://www.npmjs.com/package/@theluckystrike/webext-permissions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@theluckystrike/webext-permissions)
 
+[Installation](#installation) · [Quick Start](#quick-start) · [API](#api) · [License](#license)
+
+</div>
+
+---
+
+## Features
+
+- **Check permissions** -- verify if permissions are granted
+- **Request permissions** -- prompt the user for optional permissions
+- **Remove permissions** -- revoke permissions programmatically
+- **Typed** -- full TypeScript support for permission names
+- **Promise-based** -- async/await for all operations
+- **Event listeners** -- subscribe to permission added/removed events
+
+## Installation
+
+```bash
 npm install @theluckystrike/webext-permissions
+```
 
-QUICK START
+<details>
+<summary>Other package managers</summary>
 
-import {
-  checkPermission,
-  requestPermission,
-  getGrantedPermissions,
-  describePermission,
-} from "@theluckystrike/webext-permissions";
+```bash
+pnpm add @theluckystrike/webext-permissions
+# or
+yarn add @theluckystrike/webext-permissions
+```
 
-// Check if a permission is granted
-const result = await checkPermission("storage");
-console.log(result.granted, result.description);
+</details>
 
-// Request a permission (must be called from a user gesture)
-const req = await requestPermission("tabs");
-if (req.granted) {
-  console.log("tabs permission granted");
+## Quick Start
+
+```typescript
+import { Permissions } from "@theluckystrike/webext-permissions";
+
+const has = await Permissions.contains({ permissions: ["tabs"] });
+
+if (!has) {
+  const granted = await Permissions.request({ permissions: ["tabs"] });
 }
 
-// Get all currently granted permissions
-const granted = await getGrantedPermissions();
+await Permissions.remove({ permissions: ["tabs"] });
+```
 
-// Get a human-readable description
-describePermission("activeTab");
-// "Access the currently active tab when you click the extension"
+## API
 
-API
+| Method | Description |
+|--------|-------------|
+| `contains(perms)` | Check if permissions are already granted |
+| `request(perms)` | Request optional permissions from the user |
+| `remove(perms)` | Revoke permissions |
+| `getAll()` | List all granted permissions |
+| `onAdded(callback)` | Listen for newly granted permissions |
+| `onRemoved(callback)` | Listen for revoked permissions |
 
-checkPermission(permission)
 
-Checks whether a single permission is currently granted. Returns a Promise resolving to a PermissionResult with permission name, granted status, and a human-readable description.
 
-checkPermissions(permissions)
+## Part of @zovo/webext
 
-Batch version. Takes an array of permission strings and returns a Promise resolving to an array of PermissionResult objects in the same order.
+This package is part of the [@zovo/webext](https://github.com/theluckystrike) family -- typed, modular utilities for Chrome extension development:
 
-requestPermission(permission)
+| Package | Description |
+|---------|-------------|
+| [webext-storage](https://github.com/theluckystrike/webext-storage) | Typed storage with schema validation |
+| [webext-messaging](https://github.com/theluckystrike/webext-messaging) | Type-safe message passing |
+| [webext-tabs](https://github.com/theluckystrike/webext-tabs) | Tab query helpers |
+| [webext-cookies](https://github.com/theluckystrike/webext-cookies) | Promise-based cookies API |
+| [webext-i18n](https://github.com/theluckystrike/webext-i18n) | Internationalization toolkit |
 
-Requests a single optional permission. This must be called from a user gesture like a button click. Returns a Promise resolving to a RequestResult with a granted boolean and an optional error string.
+## Contributing
 
-requestPermissions(permissions)
+Contributions are welcome! Please open an issue or submit a pull request.
 
-Requests multiple permissions in a single browser prompt. Same user gesture requirement applies.
-
-removePermission(permission)
-
-Removes a previously granted permission. Returns a Promise resolving to true if the removal succeeded.
-
-getGrantedPermissions()
-
-Returns all currently granted permissions as an array of PermissionResult objects, each with a human-readable description.
-
-describePermission(permission)
-
-Synchronous function that returns a human-readable description for any Chrome permission string. For unknown permissions, returns a fallback string.
-
-listPermissions()
-
-Returns all 54 known Chrome permissions with their descriptions. The granted field is always false in this listing. Use checkPermissions for live status.
-
-TYPES
-
-  PermissionResult    { permission: string; granted: boolean; description: string }
-  RequestResult       { granted: boolean; error?: string }
-
-PERMISSION DESCRIPTIONS
-
-The library ships with plain-English descriptions for all standard Chrome permissions. A few examples:
-
-  activeTab           Access the currently active tab when you click the extension
-  storage             Store and retrieve data locally
-  tabs                Read information about open tabs
-  notifications       Show desktop notifications
-  cookies             Read and modify cookies
-  scripting           Inject scripts into web pages
-  webNavigation       Track navigation events
-  bookmarks           Read and modify bookmarks
-  history             Read and modify browsing history
-  downloads           Manage downloads
-
-There are 54 descriptions in total. See the source for the full list.
-
-MANIFEST SETUP
-
-Permissions you want to request at runtime must be listed under optional_permissions in your manifest.json.
-
-{
-  "optional_permissions": ["tabs", "bookmarks", "history"]
-}
-
-Required permissions listed under permissions are always granted and cannot be managed at runtime.
-
-LICENSE
-
-MIT
-
-ABOUT
-
-Part of the @zovo/webext toolkit. Built by theluckystrike at zovo.one, a studio for Chrome extensions and browser tools.
-
-https://github.com/theluckystrike/webext-permissions
-
-Part of the **[Chrome Extension Toolkit](https://github.com/theluckystrike/chrome-extension-toolkit)** by theluckystrike. See all templates, packages, and guides at [github.com/theluckystrike/chrome-extension-toolkit](https://github.com/theluckystrike/chrome-extension-toolkit).
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+MIT License -- see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+Built by [theluckystrike](https://github.com/theluckystrike) · [zovo.one](https://zovo.one)
+
+</div>
